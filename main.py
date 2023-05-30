@@ -4,14 +4,17 @@ from RSSParser import download_episode
 
 
 def main():
-    '''
-    Python script to be run in the console
-    '''
+    """
+    Python script to be run in the console.
+   :argument str episode_number: The episode to be downloaded
+   :argument str rss_file: Path of local RSS file to be used offline
+    """
     print(*sys.argv)
-    if len(sys.argv) != 2:
-        print("This script requires one argument.")
+    if len(sys.argv) < 2:
+        print("This script requires at least one argument.")
     argument1 = sys.argv[1]
-    download_episode(argument1)
+    argument2 = sys.argv[2]
+    download_episode(argument1, argument2)
 
 
 if __name__ == '__main__':

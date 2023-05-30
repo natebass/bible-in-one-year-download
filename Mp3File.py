@@ -13,5 +13,5 @@ class Mp3File(BaseModel):
     image: str
     duration: int
     episode: int
-    season = 1
+    season: int = 1
     publishedDate: date

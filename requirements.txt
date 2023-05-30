@@ -2,3 +2,5 @@ requests
 lxml
 mutagen
 pydantic
+pandas
+natsort
