@@ -4,3 +4,4 @@ mutagen
 pydantic
 pandas
 natsort
+pytest
