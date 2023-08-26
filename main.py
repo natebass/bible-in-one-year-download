@@ -1,6 +1,8 @@
 from os import path, mkdir, remove, listdir
 from pathlib import Path
 
+from lxml import etree
+
 from rssmp3parser.CommandLineArguments import CommandLineArguments
 from rssmp3parser.RSSMp3Downloader import RSSMp3Downloader
 from rssmp3parser.RSSParser import RSSParser
@@ -31,6 +33,7 @@ def parse_arguments():
     """
     arguments = CommandLineArguments()
     rss_type = parse_rss_type('')
+    # TODO: Add parameter [int] for days. 1 is one day ahead and back. -1 is behind. +1 is future.
     # if (arguments_count := len(sys.argv)) < 2:
     #     print_error('This script requires at least one argument.')
     #     raise SystemExit(2)
@@ -57,28 +60,29 @@ def main():
     # 1. Create an RSSParser based on the arguments passed to the CLI
     arguments, rss_type = parse_arguments()
     # 2. Parse RSS file
-    rss_parser = RSSParser(rss_type=rss_type, feed_xml=arguments.feed_url)
-    # 2. Handle caching data about the RSS file
-    create_directory(arguments.audio_files_directory)
-    if arguments.cache_enabled:
-        rss_parser.save_rss_as_file(Path.cwd())
-    elif arguments.remove_cache:
-        for file in listdir('.'):
-            if file.endswith('.xml') or file.endswith('.rss') or file == rss_parser.config_file:
-                remove(file)
-    # 3. Download the files
-    downloader = RSSMp3Downloader(mp3_files=rss_parser.get_mp3_files(), episode_number=arguments.episode,
-                                  audio_files_directory=arguments.audio_files_directory)
-    if arguments.download_all:
-        try:
-            downloader.download_all_episodes()
-        except Exception as exception:
-            print_error(str(exception))
-    else:
-        try:
-            downloader.download_episode(arguments.episode)
-        except Exception as exception:
-            print_error(str(exception))
+    # etree.parse(arguments.feed_url)
+    # rss_parser = RSSParser(rss_type=rss_type, feed_xml=arguments.feed_url)
+    # # 2. Handle caching data about the RSS file
+    # create_directory(arguments.audio_files_directory)
+    # if arguments.cache_enabled:
+    #     rss_parser.save_rss_as_file(Path.cwd())
+    # elif arguments.remove_cache:
+    #     for file in listdir('.'):
+    #         if file.endswith('.xml') or file.endswith('.rss') or file == rss_parser.config_file:
+    #             remove(file)
+    # # 3. Download the files
+    # downloader = RSSMp3Downloader(mp3_files=rss_parser.get_mp3_files(), episode_number=arguments.episode,
+    #                               audio_files_directory=arguments.audio_files_directory)
+    # if arguments.download_all:
+    #     try:
+    #         downloader.download_all_episodes()
+    #     except Exception as exception:
+    #         print_error(str(exception))
+    # else:
+    #     try:
+    #         downloader.download_episode(arguments.episode)
+    #     except Exception as exception:
+    #         print_error(str(exception))
 
 
 if __name__ == '__main__':
