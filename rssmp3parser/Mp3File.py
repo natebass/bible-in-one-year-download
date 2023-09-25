@@ -5,6 +5,8 @@ from pydantic import BaseModel
 
 
 class Mp3File(BaseModel):
+    """Model for Mp3 file
+    """
     file_path: Path | None
     name: str | None
     description: str | None

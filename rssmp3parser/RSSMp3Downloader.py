@@ -1,30 +1,37 @@
 import glob
 from pathlib import Path
-
 import requests
 from mutagen.flac import FLAC
 from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
 from pydantic import BaseModel
-
 from rssmp3parser.Mp3File import Mp3File
 
 
 class RSSMp3Downloader(BaseModel):
+    """Mp3 RSS downloader
+    :var mp3_files: Mp3File
+    :var episode_number: int
+    :var audio_files_directory: Path
+    """
     mp3_files: Mp3File
     episode_number: int = 0
     audio_files_directory: Path
 
     def download_episode(self, episode):
+        """Parse publication date
+        :parameter Item
+        """
         pass
 
     def download_all_episodes(self):
+        """Parse publication date
+        :parameter Item
+        """
         mp3_file = self.mp3_files[self.episode_number]
         image_urls = []
         filenames = glob.glob("*.txt")
         image_file_path = self.handle_image(mp3_file.image, image_urls)
-        # for mp3_file in mp3_files:
-        #     handle_image(mp3_file.image)
         file = FLAC(image_file_path)
         art = file.pictures[0].data
         audio = MP3(mp3_file.file_path, ID3=ID3)
@@ -33,6 +40,9 @@ class RSSMp3Downloader(BaseModel):
 
     @staticmethod
     def download_file_image(image_url, image_file_path):
+        """Parse publication date
+        :parameter Item
+        """
         response = requests.get(image_url)
         if response.status_code == 200:
             with open(image_file_path, 'wb') as file:
@@ -42,9 +52,15 @@ class RSSMp3Downloader(BaseModel):
 
     @staticmethod
     def parse_image_url_for_file_name(image_url):
+        """Parse publication date
+        :parameter Item
+        """
         return image_url.rsplit('/', 1)[-1]
 
     def handle_image(self, image_url, image_urls):
+        """Parse publication date
+        :parameter Item
+        """
         image_file = self.parse_image_url_for_file_name(image_url)
         if image_url not in image_urls:
             self.download_file_image(image_url, image_file)

@@ -6,3 +6,4 @@ pandas
 natsort
 pytest
 coverage
+cmd2

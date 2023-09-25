@@ -13,6 +13,8 @@ from rssmp3parser.Mp3File import Mp3File
 
 
 class RSSParser(BaseModel):
+    """
+    """
     rss_type: str | None
     config_file: str = Literal['rss_mp3_downloader_cache.yml']
     feed_xml: str | None
@@ -20,49 +22,82 @@ class RSSParser(BaseModel):
 
     @staticmethod
     def parse_pub_date(item):
+        """Parse publication date
+        :parameter Item
+        """
         return datetime.strptime(item.xpath("pubDate")[0].text, "%a, %d %b %Y %H:%M:%S %Z").date()
 
     @staticmethod
     def parse_image(item):
+        """Parse publication date
+        :parameter Item
+        """
         return \
             item.xpath("itunes:image", namespaces={"itunes": "https://www.itunes.com/dtds/podcast-1.0.dtd"})[0].attrib[
                 "href"]
 
     @staticmethod
     def parse_guid(item):
+        """Parse publication date
+        :parameter Item
+        """
         return item.xpath("guid")[0].text
 
     @staticmethod
     def parse_link(item):
+        """Parse publication date
+        :parameter Item
+        """
         return item.xpath("link")[0].text
 
     @staticmethod
     def parse_title(item_title):
+        """Parse publication date
+        :parameter Item
+        """
         return item_title[0].text
 
     @staticmethod
     def parse_file_path(item_title):
+        """Parse publication date
+        :parameter Item
+        """
         return Path(f"{item_title[0].text}.mp3")
 
     @staticmethod
     def parse_description(item):
+        """Parse publication date
+        :parameter Item
+        """
         return item.xpath("description")[0].text
 
     @staticmethod
     def get_feed_from_file(filename):
+        """Parse publication date
+        :parameter Item
+        """
         return etree.parse(filename)
 
     def save_rss_as_file(self, path, feed_xml=""):
+        """Parse publication date
+        :parameter Item
+        """
         rss_page_title = feed_xml.xpath("//channel/title/text()")[0]
         if not os.path.exists(rss_page_title):
             with open(f"{rss_page_title}.xml", "wb") as file:
                 file.write(etree.tostring(feed_xml))
 
     def parse_rss(self, feed_file):
+        """Parse publication date
+        :parameter Item
+        """
         self.feed_xml = etree.parse(feed_file)
         mp3_files = self.parse_rss_for_mp3(self.feed_xml, self.feed_type)
 
     def get_mp3_files(self, feed_xml, feed_type):
+        """Parse publication date
+        :parameter Item
+        """
         results = []
         for item in feed_xml.xpath("//item"):
             item_title = item.xpath("title")
@@ -86,10 +121,16 @@ class RSSParser(BaseModel):
 
     @staticmethod
     def parse_episode_days(name):
+        """Parse publication date
+        :parameter Item
+        """
         episode_day = re.findall(r'\d+', name)
         return episode_day[0] if episode_day else None
 
     def filter_and_sort_bioy(self, mp3_files):
+        """Parse publication date
+        :parameter Item
+        """
         df = pd.DataFrame([dict(mp3file) for mp3file in mp3_files])
         df['day'] = df['name'].apply(self.parse_episode_days)
         # df = df[(~df['name'].duplicated()) | df['name'].isna()]
